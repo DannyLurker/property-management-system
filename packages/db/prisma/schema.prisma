@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Minimal scaffold shape. The data model spec (scope row 3) refines this.
+enum RoomStatus {
+  CLEAN
+  DIRTY
+  OUT_OF_ORDER
+}
+
+model RoomType {
+  id        String  @id @default(cuid())
+  code      String  @unique
+  name      String
+  sizeM2    Float
+  bedSetup  String
+  bathSetup String
+  baseRate  Decimal @db.Decimal(12, 2)
+  rooms     Room[]
+}
+
+model Room {
+  id     String     @id @default(cuid())
+  number String     @unique
+  floor  Int
+  status RoomStatus @default(CLEAN)
+  typeId String
+  type   RoomType   @relation(fields: [typeId], references: [id])
+}

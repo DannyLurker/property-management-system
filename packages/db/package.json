@@ -1,0 +1,29 @@
+{
+  "name": "@pms/db",
+  "private": true,
+  "version": "0.1.0",
+  "exports": {
+    ".": {
+      "types": "./src/client.ts",
+      "default": "./src/client.ts"
+    }
+  },
+  "scripts": {
+    "build": "prisma generate",
+    "typecheck": "tsc --noEmit",
+    "validate": "prisma validate"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.0.0",
+    "@prisma/client": "^7.0.0",
+    "dotenv": "^17.0.0",
+    "pg": "^8.13.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/pg": "^8.11.0",
+    "prisma": "^7.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.9.2"
+  }
+}

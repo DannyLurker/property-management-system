@@ -1,0 +1,10 @@
+{
+  "name": "@pms/booking-web",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "build": "echo booking-web is deferred to v1.1.0",
+    "typecheck": "echo booking-web is deferred to v1.1.0",
+    "dev": "echo booking-web is deferred to v1.1.0"
+  }
+}

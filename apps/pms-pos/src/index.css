@@ -1,0 +1,9 @@
+@import "@pms/ui/styles.css";
+
+/* Tailwind scans this app plus the shared package for classes. */
+@source "../**/*.{ts,tsx}";
+@source "../../node_modules/@pms/ui/src/**/*.{ts,tsx}";
+
+body {
+  margin: 0;
+}

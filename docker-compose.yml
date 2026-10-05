@@ -1,0 +1,38 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: pms
+      POSTGRES_PASSWORD: pms
+      POSTGRES_DB: pms
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  api:
+    build: ./apps/api
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://pms:pms@postgres:5432/pms?schema=public
+    depends_on:
+      - postgres
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      # Built locally via pnpm --filter @pms/pms-pos build, served as static files.
+      - ./apps/pms-pos/dist:/srv/pms-pos:ro
+    depends_on:
+      - api
+
+  # booking-web joins here at v1.1.0 as its own service behind nginx.
+
+volumes:
+  pgdata:

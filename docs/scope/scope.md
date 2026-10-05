@@ -9,35 +9,43 @@ _These are recommendations to keep your build orderly, not requirements. Skip an
 
 ## At a glance
 
-| #   | Feature                         | Phase      | Status  |
-| --- | ------------------------------- | ---------- | ------- |
-| 1   | Stack and architecture          | Foundation | planned |
-| 2   | Coding standards and tooling    | Foundation | planned |
-| 3   | Data model                      | Foundation | planned |
-| 4   | Deploy and backup               | Foundation | planned |
-| 5   | Design system and UI foundation | Foundation | planned |
-| 6   | Room master and rates           | v1.0.0     | planned |
-| 7   | Reservation calendar            | v1.0.0     | planned |
-| 8   | Check in, check out and folio   | v1.0.0     | planned |
-| 9   | Housekeeping status             | v1.0.0     | planned |
-| 10  | Night audit and daily summary   | v1.0.0     | planned |
-| 11  | Direct booking engine           | v1.1.0     | planned |
-| 12  | Xendit payments and webhook     | v1.1.0     | planned |
-| 13  | SiteMinder outbound ARI         | v1.2.0     | planned |
-| 14  | SiteMinder inbound reservations | v1.2.0     | planned |
-| 15  | POS terminal and charge to room | v1.3.0     | planned |
-| 16  | POS stock deduction             | v1.3.0     | planned |
-| 17  | Staff PIN shift logger          | v1.4.0     | planned |
-| 18  | AI guest FAQ and mgmt bot       | v1.4.0     | planned |
+| #   | Feature                         | Phase      | Status      |
+| --- | ------------------------------- | ---------- | ----------- |
+| 1   | Stack and architecture          | Foundation | planned     |
+| 2   | Coding standards and tooling    | Foundation | planned     |
+| 3   | Data model                      | Foundation | planned     |
+| 4   | Deploy and backup               | Foundation | planned     |
+| 5   | Design system and UI foundation | Foundation | planned     |
+| 6   | Room master and rates           | v1.0.0     | planned     |
+| 7   | Reservation calendar            | v1.0.0     | planned     |
+| 8   | Check in, check out and folio   | v1.0.0     | planned     |
+| 9   | Housekeeping status             | v1.0.0     | planned     |
+| 10  | Night audit and daily summary   | v1.0.0     | planned     |
+| 11  | Direct booking engine           | v1.1.0     | planned     |
+| 12  | Xendit payments and webhook     | v1.1.0     | planned     |
+| 13  | SiteMinder outbound ARI         | v1.2.0     | planned     |
+| 14  | SiteMinder inbound reservations | v1.2.0     | planned     |
+| 15  | POS terminal and charge to room | v1.3.0     | planned     |
+| 16  | POS stock deduction             | v1.3.0     | planned     |
+| 17  | Staff PIN shift logger          | v1.4.0     | planned     |
+| 18  | AI guest FAQ and mgmt bot       | v1.4.0     | planned     |
+| 19  | Shared UI package               | Foundation | in-progress |
 
 ## Foundations
 
-### 1. Stack and architecture · needs a decision
+### 1. Stack and architecture · in-progress
 
 You need one recorded choice for monorepo layout, API, web apps, database and auth so later work has solid ground.
 **Done when:** the stack choice is recorded in a spec and an empty scaffold boots locally and builds clean.
 
-- [ ] Decide the stack (spec): `/architect stack and architecture`
+- [x] Decide the stack (spec): `/architect stack and architecture`
+- [ ] Build it: `/develop stack and architecture`
+  - [x] Turborepo + pnpm skeleton + Compose (postgres/api/pms-pos/nginx)
+  - [ ] Prisma in packages/db + 117-room seed + migrate deploy smoke
+  - [x] packages/ui on Tailwind v4 + shadcn new-york, consumed by Vite shell
+  - [x] NestJS health + Pino + Throttler + Helmet + feature flags
+  - [ ] Vite shell boots, build and compose up green
+        Spec 0001 · code in `./`
 
 ### 2. Coding standards and tooling
 
@@ -66,6 +74,17 @@ You need one visual language and base parts for staff screens plus guest booking
 **Done when:** `design.md` covers type and color and spacing and parts, and base parts support keyboard and focus.
 
 - [ ] Design it (spec): `/architect design system and UI foundation`
+
+### 19. Shared UI package · in-progress
+
+You need one shared place for UI parts so staff screens and guest booking look the same and you avoid double work. This uses shadcn as you requested for the main parts.
+**Done when:** both apps use the same package for buttons and forms and cards and the package builds clean in the monorepo.
+
+- [x] Design it (spec): `/architect shared UI package` (decided in Spec 0001: Tailwind v4, new-york style, pms-pos first)
+- [x] Build it: `/develop shared UI package`
+  - [x] Scaffold packages/ui with theme tokens and first parts
+  - [x] Wire into pms-pos shell and prove the build
+        Spec 0001 · code in `packages/ui`
 
 ## v1.0.0 PMS Core
 
