@@ -30,6 +30,7 @@ _These are recommendations to keep your build orderly, not requirements. Skip an
 | 17  | Staff PIN shift logger          | v1.4.0     | planned     |
 | 18  | AI guest FAQ and mgmt bot       | v1.4.0     | planned     |
 | 19  | Shared UI package               | Foundation | in-progress |
+| 20  | Staff auth                      | Foundation | in-progress |
 
 ## Foundations
 
@@ -39,12 +40,12 @@ You need one recorded choice for monorepo layout, API, web apps, database and au
 **Done when:** the stack choice is recorded in a spec and an empty scaffold boots locally and builds clean.
 
 - [x] Decide the stack (spec): `/architect stack and architecture`
-- [ ] Build it: `/develop stack and architecture`
+- [x] Build it: `/develop stack and architecture`
   - [x] Turborepo + pnpm skeleton + Compose (postgres/api/pms-pos/nginx)
-  - [ ] Prisma in packages/db + 117-room seed + migrate deploy smoke
+  - [x] Prisma in packages/db + 117-room seed + migrate deploy smoke
   - [x] packages/ui on Tailwind v4 + shadcn new-york, consumed by Vite shell
   - [x] NestJS health + Pino + Throttler + Helmet + feature flags
-  - [ ] Vite shell boots, build and compose up green
+  - [x] Vite shell boots, build and compose up green
         Spec 0001 · code in `./`
 
 ### 2. Coding standards and tooling
@@ -85,6 +86,23 @@ You need one shared place for UI parts so staff screens and guest booking look t
   - [x] Scaffold packages/ui with theme tokens and first parts
   - [x] Wire into pms-pos shell and prove the build
         Spec 0001 · code in `packages/ui`
+
+### 20. Staff auth · in-progress
+
+Staff plus guests share one Better Auth setup with roles, Google for guests, and a 6 digit PIN grant before money moves.
+**Done when:** staff sign in with email plus password, public signup lands on GUEST only, and money moves need a fresh PIN grant.
+
+- [x] Design it (spec): `/architect staff auth`
+- [ ] Build it: `/develop staff auth`
+  - [ ] Auth tables plus migration
+  - [ ] Better Auth instance plus NestJS mount
+  - [ ] PIN plus manager endpoints
+  - [ ] Client helpers for the staff app
+- [ ] Verify it: `/check verify staff auth`
+- [ ] Test it: `/test staff auth`
+- [ ] Review it (fresh model): `/check review staff auth`
+- [ ] Document it: `/document staff auth`
+      Spec 0002
 
 ## v1.0.0 PMS Core
 

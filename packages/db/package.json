@@ -9,7 +9,8 @@
     }
   },
   "scripts": {
-    "build": "prisma generate",
+    "build": "tsc --noEmit",
+    "generate": "prisma generate",
     "typecheck": "tsc --noEmit",
     "validate": "prisma validate"
   },

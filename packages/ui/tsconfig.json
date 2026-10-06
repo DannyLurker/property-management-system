@@ -9,7 +9,6 @@
     "esModuleInterop": true,
     "declaration": true,
     "emitDeclarationOnly": true,
-    "outDir": "dist",
     "types": ["react"]
   },
   "include": ["src"]

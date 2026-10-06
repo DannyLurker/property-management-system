@@ -2,7 +2,9 @@
   "name": "@pms/ui",
   "private": true,
   "version": "0.1.0",
-  "sideEffects": ["*.css"],
+  "sideEffects": [
+    "*.css"
+  ],
   "exports": {
     ".": {
       "types": "./src/index.ts",

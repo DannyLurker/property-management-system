@@ -12,7 +12,9 @@ services:
       - "5432:5432"
 
   api:
-    build: ./apps/api
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
     restart: unless-stopped
     env_file: .env
     environment:

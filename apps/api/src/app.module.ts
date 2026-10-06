@@ -1,17 +1,10 @@
-import { Module } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
-import { ThrottlerModule, ThrottlerGuard } from "@nestjs/throttler";
-import { APP_GUARD } from "@nestjs/core";
-import { LoggerModule } from "nestjs-pino";
-import { AppController } from "./app.controller";
+import { Module } from '@nestjs/common';
+import { AppController } from './app.controller.js';
+import { AppService } from './app.service.js';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
-    ThrottlerModule.forRoot([{ ttl: 60_000, limit: 100 }]),
-    LoggerModule.forRoot({ pinoHttp: { level: process.env.LOG_LEVEL ?? "info" } }),
-  ],
+  imports: [],
   controllers: [AppController],
-  providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
+  providers: [AppService],
 })
 export class AppModule {}
