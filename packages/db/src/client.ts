@@ -1,12 +1,16 @@
-import "dotenv/config";
-import { PrismaClient } from "../generated/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { config } from "dotenv";
+import { PrismaClient } from "../generated-prisma-client/client.js";
+config();
 
-// Single instance per process. A new pool per import exhausts connections.
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
+const databaseUrl = process.env.DATABASE_URL;
 
-const globalForPrisma = globalThis as unknown as { db?: PrismaClient };
+if (!databaseUrl) {
+  throw new Error("DATABASE_URL is not set");
+}
 
-export const db = globalForPrisma.db ?? new PrismaClient({ adapter });
+const adapter = new PrismaPg({
+  connectionString: databaseUrl,
+});
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.db = db;
+export const db = new PrismaClient({ adapter });

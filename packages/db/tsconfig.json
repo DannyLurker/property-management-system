@@ -1,13 +1,15 @@
 {
+  "extends": "@pms/typescript-config/base.json",
   "compilerOptions": {
-    "target": "ES2022",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
+    "outDir": "./dist",
+    "rootDir": ".",
+    "target": "ES2023",
     "strict": true,
-    "skipLibCheck": true,
     "esModuleInterop": true,
-    "outDir": "dist",
-    "rootDir": "."
+    "types": ["node"]
   },
-  "include": ["prisma/seed.ts", "src"]
+  "include": ["lib/**/*.ts", "*.config.ts", "index.ts"],
+  "exclude": ["node_modules", "dist"]
 }

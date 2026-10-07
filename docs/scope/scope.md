@@ -53,7 +53,7 @@ You need one recorded choice for monorepo layout, API, web apps, database and au
 You need shared rules and clean checks from the real scaffold so solo work stays tidy.
 **Done when:** root `AGENTS.md` reflects the real stack and lint and format run clean.
 
-- [ ] Capture conventions and tooling: `/audit`
+- [x] Capture conventions and tooling: `/audit`
 
 ### 3. Data model · needs a decision
 

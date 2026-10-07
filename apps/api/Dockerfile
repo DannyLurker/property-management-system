@@ -1,5 +1,5 @@
 # --- STAGE 1: Build ---
-FROM node:22-alpine AS build
+FROM node:24-alpine AS build
 RUN corepack enable
 
 WORKDIR /app
@@ -29,9 +29,10 @@ RUN pnpm --filter @pms/api build
 
 # 7. Isolate production build
 RUN pnpm --filter @pms/api deploy --prod /app/deploy
+RUN cp -r /app/apps/api/dist /app/deploy/dist
 
 # --- STAGE 2: Production Runtime ---
-FROM node:22-alpine AS runner
+FROM node:24-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production

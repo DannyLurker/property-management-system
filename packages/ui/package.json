@@ -14,7 +14,8 @@
   },
   "scripts": {
     "build": "tsc --noEmit",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ."
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
@@ -27,7 +28,10 @@
     "tailwindcss": "^4"
   },
   "devDependencies": {
+    "@pms/eslint-config": "workspace:*",
+    "@pms/typescript-config": "workspace:*",
     "@types/react": "^19.0.0",
+    "eslint": "catalog:",
     "tailwindcss": "^4.1.0",
     "typescript": "^5.9.2"
   }

@@ -3,7 +3,10 @@ packages:
   - "packages/*"
 
 allowBuilds:
-  '@prisma/client': true
-  '@prisma/engines': true
+  "@prisma/client": true
+  "@prisma/engines": true
   esbuild: true
   prisma: true
+
+catalog:
+  "eslint": "10.9.1"

@@ -5,4 +5,4 @@ dist/
 .env.local
 *.log
 .DS_Store
-packages/db/generated/
+packages/db/generated-prisma-client/

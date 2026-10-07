@@ -1,18 +1,26 @@
 {
   "name": "@pms/db",
+  "type": "module",
   "private": true,
   "version": "0.1.0",
   "exports": {
     ".": {
-      "types": "./src/client.ts",
-      "default": "./src/client.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./client": {
+      "types": "./dist/generated-prisma-client/client.d.ts",
+      "import": "./dist/generated-prisma-client/client.js",
+      "default": "./dist/generated-prisma-client/client.js"
     }
   },
   "scripts": {
-    "build": "tsc --noEmit",
+    "build": "tsc",
     "generate": "prisma generate",
     "typecheck": "tsc --noEmit",
-    "validate": "prisma validate"
+    "validate": "prisma validate",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.0.0",
@@ -23,8 +31,11 @@
   "devDependencies": {
     "@types/node": "^22.0.0",
     "@types/pg": "^8.11.0",
+    "eslint": "catalog:",
     "prisma": "^7.0.0",
     "tsx": "^4.19.0",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "@pms/eslint-config": "workspace:*",
+    "@pms/typescript-config": "workspace:*"
   }
 }

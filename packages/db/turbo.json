@@ -1,0 +1,13 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["generate"],
+      "outputs": ["dist/**"]
+    },
+    "generate": {
+      "outputs": ["generated-prisma-client/**"],
+      "env": ["DATABASE_URL"]
+    }
+  }
+}

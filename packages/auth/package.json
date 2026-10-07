@@ -4,9 +4,13 @@
   "version": "0.1.0",
   "scripts": {
     "build": "tsc --noEmit",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ."
   },
   "devDependencies": {
-    "typescript": "^5.9.2"
+    "eslint": "catalog:",
+    "typescript": "^5.9.2",
+    "@pms/eslint-config": "workspace:*",
+    "@pms/typescript-config": "workspace:*"
   }
 }
