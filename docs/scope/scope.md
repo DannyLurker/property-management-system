@@ -11,9 +11,9 @@ _These are recommendations to keep your build orderly, not requirements. Skip an
 
 | #   | Feature                         | Phase      | Status      |
 | --- | ------------------------------- | ---------- | ----------- |
-| 1   | Stack and architecture          | Foundation | planned     |
-| 2   | Coding standards and tooling    | Foundation | planned     |
-| 3   | Data model                      | Foundation | planned     |
+| 1   | Stack and architecture          | Foundation | done        |
+| 2   | Coding standards and tooling    | Foundation | done        |
+| 3   | Data model                      | Foundation | done        |
 | 4   | Deploy and backup               | Foundation | planned     |
 | 5   | Design system and UI foundation | Foundation | planned     |
 | 6   | Room master and rates           | v1.0.0     | planned     |
@@ -34,7 +34,7 @@ _These are recommendations to keep your build orderly, not requirements. Skip an
 
 ## Foundations
 
-### 1. Stack and architecture · in-progress
+### 1. Stack and architecture · done
 
 You need one recorded choice for monorepo layout, API, web apps, database and auth so later work has solid ground.
 **Done when:** the stack choice is recorded in a spec and an empty scaffold boots locally and builds clean.
@@ -48,19 +48,29 @@ You need one recorded choice for monorepo layout, API, web apps, database and au
   - [x] Vite shell boots, build and compose up green
         Spec 0001 · code in `./`
 
-### 2. Coding standards and tooling
+### 2. Coding standards and tooling · done
 
 You need shared rules and clean checks from the real scaffold so solo work stays tidy.
 **Done when:** root `AGENTS.md` reflects the real stack and lint and format run clean.
 
 - [x] Capture conventions and tooling: `/audit`
 
-### 3. Data model · needs a decision
+### 3. Data model · done
 
 You need rooms, rates, guests, reservations, folios, users and PINs modeled once so later slices avoid painful remakes. Seed covers 117 rooms (Moderate 20, Superior Double 40, Superior Twin 35, Deluxe 15, Junior Suite 5, BIZ Suite 2) with your room sizes and bed and bath details.
 **Done when:** entities and links support reservations, folios, housekeeping and later POS and payments without a breaking remake.
 
-- [ ] Design it (spec): `/architect data model`
+- [x] Design it (spec): `/architect data model`
+- [x] Build it: `/develop data model`
+  - [x] Schema plus migration plus extended seed
+  - [x] Query helpers for balance, rate, availability and status
+  - [x] Validate plus typecheck plus live seed proof
+  - [x] Sellability plus supervisor trail (AC-7, AC-8): `/develop data model`
+- [x] Verify it: `/check verify data model`
+- [x] Test it: `/test data model`
+- [x] Review it (fresh model): `/check review data model`
+- [x] Document it: `/document data model`
+      Spec `docs/specs/0003-data-model/index.md` · code in `packages/db`, `packages/domain`
 
 ### 4. Deploy and backup
 

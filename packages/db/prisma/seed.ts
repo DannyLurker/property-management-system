@@ -1,4 +1,4 @@
-import { db } from "../src/client";
+import { db } from "../src/client.js";
 
 const types = [
   { code: "MOD", name: "Moderate Room", sizeM2: 15, bedSetup: "1 Queen Bed", bathSetup: "Entry Level", baseRate: 450000, count: 20, floor: 1, prefix: "1" },

@@ -7,29 +7,166 @@ datasource db {
   provider = "postgresql"
 }
 
-// Minimal scaffold shape. The data model spec (scope row 3) refines this.
 enum RoomStatus {
   CLEAN
   DIRTY
+  INSPECTED
   OUT_OF_ORDER
 }
 
+enum ReservationState {
+  RESERVED
+  CHECKED_IN
+  CHECKED_OUT
+  CANCELLED
+  NO_SHOW
+}
+
+enum ReservationSource {
+  DIRECT
+  OTA
+  WALK_IN
+}
+
+enum FolioLineSource {
+  ROOM
+  POS
+  MANUAL
+}
+
+enum PaymentMethod {
+  CASH
+  QRIS
+  VA
+  EWALLET
+  CARD
+}
+
+enum PaymentState {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
 model RoomType {
-  id        String  @id @default(cuid())
-  code      String  @unique
+  id        String     @id @default(cuid())
+  code      String     @unique
   name      String
   sizeM2    Float
   bedSetup  String
   bathSetup String
-  baseRate  Decimal @db.Decimal(12, 2)
+  baseRate  Decimal    @db.Decimal(12, 2)
   rooms     Room[]
+  ratePlans RatePlan[]
 }
 
 model Room {
-  id     String     @id @default(cuid())
-  number String     @unique
-  floor  Int
-  status RoomStatus @default(CLEAN)
-  typeId String
-  type   RoomType   @relation(fields: [typeId], references: [id])
+  id           String        @id @default(cuid())
+  number       String        @unique
+  floor        Int
+  status       RoomStatus    @default(CLEAN)
+  typeId       String
+  type         RoomType      @relation(fields: [typeId], references: [id])
+  reservations Reservation[]
+  statusLogs   StatusLog[]
+}
+
+model RatePlan {
+  id        String   @id @default(cuid())
+  typeId    String
+  type      RoomType @relation(fields: [typeId], references: [id])
+  name      String
+  startDate DateTime @db.Date
+  endDate   DateTime @db.Date
+  price     Decimal  @db.Decimal(12, 2)
+
+  @@unique([typeId, startDate])
+  @@index([typeId, startDate, endDate])
+}
+
+model Guest {
+  id           String        @id @default(cuid())
+  name         String
+  phone        String?
+  email        String?
+  idNumber     String?
+  userId       String?
+  reservations Reservation[]
+
+  @@index([userId])
+  @@index([email])
+}
+
+model Reservation {
+  id       String            @id @default(cuid())
+  guestId  String
+  guest    Guest             @relation(fields: [guestId], references: [id])
+  roomId   String
+  room     Room              @relation(fields: [roomId], references: [id])
+  checkIn  DateTime          @db.Date
+  checkOut DateTime          @db.Date
+  state    ReservationState  @default(RESERVED)
+  source   ReservationSource @default(DIRECT)
+  staffId  String?
+  folio    Folio?
+
+  @@index([roomId, checkIn, checkOut])
+  @@index([guestId])
+  @@index([state])
+}
+
+model Folio {
+  id            String      @id @default(cuid())
+  reservationId String      @unique
+  reservation   Reservation @relation(fields: [reservationId], references: [id])
+  lines         FolioLine[]
+  payments      Payment[]
+}
+
+model FolioLine {
+  id      String          @id @default(cuid())
+  folioId String
+  folio   Folio           @relation(fields: [folioId], references: [id])
+  date    DateTime        @db.Date
+  source  FolioLineSource @default(ROOM)
+  label   String
+  amount  Decimal         @db.Decimal(12, 2)
+  idemKey String?         @unique
+
+  @@index([folioId, date])
+}
+
+model Payment {
+  id        String        @id @default(cuid())
+  folioId   String
+  folio     Folio         @relation(fields: [folioId], references: [id])
+  method    PaymentMethod @default(CASH)
+  state     PaymentState  @default(PENDING)
+  amount    Decimal       @db.Decimal(12, 2)
+  reference String?       @unique
+  paidAt    DateTime?
+
+  @@index([folioId, state])
+}
+
+model Shift {
+  id        String    @id @default(cuid())
+  staffId   String
+  startedAt DateTime  @default(now())
+  endedAt   DateTime?
+
+  @@index([staffId, startedAt])
+}
+
+model StatusLog {
+  id         String     @id @default(cuid())
+  roomId     String
+  room       Room       @relation(fields: [roomId], references: [id])
+  fromStatus RoomStatus
+  toStatus   RoomStatus
+  staffId    String
+  createdAt  DateTime   @default(now())
+
+  @@index([roomId, createdAt])
 }

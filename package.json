@@ -11,6 +11,7 @@
     "dev": "turbo run dev",
     "typecheck": "turbo run typecheck",
     "lint": "turbo run lint",
+    "test": "turbo run test",
     "prisma:deploy": "dotenv -e .env -- pnpm --filter @pms/db exec prisma migrate deploy",
     "prisma:migrate-dev": "dotenv -e .env -- pnpm --filter @pms/db exec prisma migrate dev",
     "prisma:generate": "dotenv -e .env -- pnpm --filter @pms/db exec prisma generate",
@@ -18,7 +19,7 @@
   },
   "devDependencies": {
     "turbo": "^2.5.4",
-    "typescript": "^5.9.2"
+    "typescript": "catalog:"
   },
   "dependencies": {
     "dotenv-cli": "^11.0.0"

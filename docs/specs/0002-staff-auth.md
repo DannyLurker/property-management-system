@@ -14,12 +14,14 @@ The hotel has two populations sharing one system. Seven staff roles run the fron
 ## Requirements
 
 **User stories**:
+
 - As a front desk clerk, I want to sign in with email plus password so that I can run check in and billing.
 - As an outlet cashier on a shared terminal, I want to prove identity with my PIN before each sale so that a walk up stranger cannot charge to rooms.
 - As a manager, I want to create staff accounts with roles so that nobody registers themselves into the team.
 - As a guest, I want to sign up with email or Google so that I can book direct.
 
 **Acceptance criteria**:
+
 - **AC-1**: a staff member signs in with email plus password and the session carries their role.
 - **AC-2**: public signup creates GUEST accounts only, and no public path grants a staff role.
 - **AC-3**: a manager or admin creates staff with a chosen role, and new staff set their password plus 6 digit PIN on first sign in.
@@ -36,10 +38,12 @@ The hotel has two populations sharing one system. Seven staff roles run the fron
 Proven sign in library running inside the NestJS API with the Prisma adapter, email plus password for everyone, Google for guests, Resend for the mails, plus a small PIN check owned by the API.
 
 **Pros**:
+
 - One identity for staff plus guests with no per user fee.
 - Fits the hosted stack with no new infrastructure.
 
 **Cons**:
+
 - The team operates session and mail config themselves.
 
 ### Option 2: Hosted sign in provider
@@ -47,9 +51,11 @@ Proven sign in library running inside the NestJS API with the Prisma adapter, em
 Accounts plus sessions live with an external provider.
 
 **Pros**:
+
 - Less auth code to own.
 
 **Cons**:
+
 - Monthly fee or free tier caps break the zero budget, plus staff data leaves the VPS.
 
 ### Option 3: Password only, no PIN layer
@@ -57,9 +63,11 @@ Accounts plus sessions live with an external provider.
 Email plus password alone guards terminals and money moves.
 
 **Pros**:
+
 - Smallest build.
 
 **Cons**:
+
 - A signed in shared terminal lets anyone charge to rooms, which the hotel ruled out.
 
 ## Decision
@@ -77,6 +85,7 @@ The closed team plus zero budget forces rule out a hosted provider, and shared t
 ## Feature design
 
 **Data model sketch**:
+
 - User: id, name, email unique, emailVerified, image nullable, role enum (ADMIN, MANAGER, ACCOUNTANT, HOUSEKEEPING, FRONT_DESK, OUTLET_DESK, HOUSEKEEPING_SUPERVISOR, GUEST), pinHash nullable (staff only), createdAt, updatedAt. role travels as a Better Auth additional field so the UI can read it. pinHash stays a plain Prisma column, never an additional field, so it never reaches the client.
 - Session: id, userId FK to User, token unique, expiresAt, ipAddress nullable, userAgent nullable, createdAt, updatedAt.
 - Account: id, userId FK to User, providerId plus accountId unique together, accessToken nullable, refreshToken nullable, idToken nullable, scope nullable, password nullable (credential accounts), createdAt, updatedAt.
@@ -85,7 +94,7 @@ The closed team plus zero budget forces rule out a hosted provider, and shared t
 **API surface**:
 | Endpoint | Method | Key inputs | Key outputs | Auth | Key errors |
 |---|---|---|---|---|---|
-| /api/auth/* | * | per Better Auth | per Better Auth | per Better Auth | 401, 429 |
+| /api/auth/_ | _ | per Better Auth | per Better Auth | per Better Auth | 401, 429 |
 | /api/auth/ok | GET | none | status ok | none | |
 | /api/staff/pin-check | POST | pin (6 digits), user taken from session | grant token with few minute TTL | session, staff role | 401, 403, 429 |
 | /api/staff/pin-setup | POST | setup token, password, pin (6 digits) | signed in session | one time setup token | 400, 401, 410 |
@@ -105,6 +114,7 @@ The closed team plus zero budget forces rule out a hosted provider, and shared t
 | Reset | mailed link | Verification table token plus Resend sender |
 
 **Key invariants**:
+
 - Email is unique across all users.
 - Public signup always lands on GUEST, enforced server side.
 - Staff endpoints require a live session plus a staff role.
@@ -117,12 +127,14 @@ The closed team plus zero budget forces rule out a hosted provider, and shared t
 - Sessions live 7 days and refresh daily, with a 5 minute cookie cache for reads.
 
 **Security model**:
+
 - ADMIN plus MANAGER create staff and trigger resets. ACCOUNTANT reads folio data when those features land. HOUSEKEEPING plus HOUSEKEEPING_SUPERVISOR touch room status only. FRONT_DESK runs reservations plus folios. OUTLET_DESK runs POS sales. GUEST touches only its own bookings.
 - Rate limits stay on for all auth endpoints with database storage, plus a tight custom rule on the PIN endpoint.
 - Sensitive sign in endpoints keep the default 3 tries per 10 seconds, the PIN endpoint allows 5 per minute.
 - CSRF checks stay on. Trusted origins list the staff app, the booking site and local dev only.
 
 **Configuration required**:
+
 - `BETTER_AUTH_SECRET`: session encryption secret, 32 plus chars, never committed.
 - `BETTER_AUTH_URL`: public API base URL.
 - `GOOGLE_CLIENT_ID` plus `GOOGLE_CLIENT_SECRET`: guest Google sign in.
@@ -130,6 +142,7 @@ The closed team plus zero budget forces rule out a hosted provider, and shared t
 - `ADMIN_EMAIL`: bootstrap admin address used by the seed.
 
 **Critical test scenarios**:
+
 - Happy path: staff sign in plus role in session plus PIN check passes, verifies **AC-1**, **AC-4**.
 - Failure case: five wrong PINs in a minute throttles with a generic reply, verifies **AC-5**.
 - Auth/permission: guest calls a staff endpoint and receives 403, verifies **AC-8**.
@@ -145,14 +158,17 @@ The closed team plus zero budget forces rule out a hosted provider, and shared t
 ## Consequences
 
 **Positive**:
+
 - One login for staff plus guests with roles enforced server side.
 - PIN per money move protects shared terminals with no extra hardware.
 
 **Negative / tradeoffs**:
+
 - The team owns session config, Resend deliverability and Google console setup.
 - Resend test mode only reaches the account mailbox until a domain is verified.
 
 **Neutral**:
+
 - Auth tables ship in the first auth migration, coordinated with the data model spec row 3.
 
 ## Follow-up

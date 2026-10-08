@@ -18,12 +18,13 @@ pnpm install
 pnpm build        # turbo, dependency order
 pnpm typecheck
 pnpm lint
+pnpm test           # turbo, all workspace suites
 DATABASE_URL=... pnpm --filter @pms/db exec prisma validate
 ```
 
 ## Specs
 
-Decisions in `docs/specs/`, format `docs/specs/NNNN-title.md`. Plan in `docs/scope/scope.md`.
+Decisions in `docs/specs/`, single file `docs/specs/NNNN-title.md` or directory `docs/specs/NNNN-title/` with `index.md`. Plan in `docs/scope/scope.md`.
 
 ## Rules
 
@@ -44,6 +45,7 @@ Decisions in `docs/specs/`, format `docs/specs/NNNN-title.md`. Plan in `docs/sco
 ## Agent skills
 
 - [shadcn](.agents/skills/shadcn/): `shadcn-ui/ui`, parts catalog plus Tailwind v4 combo for packages/ui
+- [vitest](.agents/skills/vitest/): `antfu/skills`, Vitest unit testing conventions for the domain plus api suites
 
 `MCP servers: shadcn (configured in opencode.json)`
 
@@ -54,6 +56,7 @@ Decisions in `docs/specs/`, format `docs/specs/NNNN-title.md`. Plan in `docs/sco
 - [apps/booking-web/AGENTS.md](apps/booking-web/AGENTS.md): guest booking placeholder until v1.1.0
 - [packages/auth/AGENTS.md](packages/auth/AGENTS.md): Better Auth home
 - [packages/db/AGENTS.md](packages/db/AGENTS.md): Prisma schema plus seed
+- [packages/domain/AGENTS.md](packages/domain/AGENTS.md): hotel domain helpers plus live tests
 - [packages/payments/AGENTS.md](packages/payments/AGENTS.md): Xendit home from v1.1.0
 - [packages/ui/AGENTS.md](packages/ui/AGENTS.md): shared shadcn parts
 - [packages/eslint-config/AGENTS.md](packages/eslint-config/AGENTS.md): shared lint rules
